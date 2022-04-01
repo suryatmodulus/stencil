@@ -1,3 +1,4 @@
+// TODO(NOW): Chase types of items deleted, rm if we can
 export class MarkdownTable {
   private rows: RowData[] = [];
 
