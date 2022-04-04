@@ -3,6 +3,7 @@ import { generateMethodTypes } from '../generate-method-types';
 import * as Util from '../../../utils/util';
 import { stubComponentCompilerMeta } from './ComponentCompilerMeta.stub';
 import { stubComponentCompilerMethod } from './ComponentCompilerMethod.stub';
+import { stubTypesImportData } from './TypesImportData.stub';
 
 describe('generate-method-types', () => {
   describe('generateMethodTypes', () => {
@@ -18,12 +19,14 @@ describe('generate-method-types', () => {
     });
 
     it('returns an empty array when no methods are provided', () => {
+      const stubImportTypes = stubTypesImportData();
       const componentMeta = stubComponentCompilerMeta();
 
-      expect(generateMethodTypes(componentMeta)).toEqual([]);
+      expect(generateMethodTypes(componentMeta, stubImportTypes)).toEqual([]);
     });
 
     it('returns the correct type info for a single method', () => {
+      const stubImportTypes = stubTypesImportData();
       const componentMethod = stubComponentCompilerMethod();
       const componentMeta = stubComponentCompilerMeta({
         methods: [componentMethod],
@@ -40,12 +43,13 @@ describe('generate-method-types', () => {
         },
       ];
 
-      const actualTypeInfo = generateMethodTypes(componentMeta);
+      const actualTypeInfo = generateMethodTypes(componentMeta, stubImportTypes);
 
       expect(actualTypeInfo).toEqual(expectedTypeInfo);
     });
 
     it('returns the correct type info for multiple methods', () => {
+      const stubImportTypes = stubTypesImportData();
       const componentMethod1 = stubComponentCompilerMethod();
       const componentMethod2 = stubComponentCompilerMethod({
         name: 'myOtherMethod',
@@ -81,7 +85,7 @@ describe('generate-method-types', () => {
         },
       ];
 
-      const actualTypeInfo = generateMethodTypes(componentMeta);
+      const actualTypeInfo = generateMethodTypes(componentMeta, stubImportTypes);
 
       expect(actualTypeInfo).toEqual(expectedTypeInfo);
     });

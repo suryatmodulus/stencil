@@ -4,6 +4,7 @@ import * as UtilHelpers from '../../../utils/helpers';
 import * as Util from '../../../utils/util';
 import { stubComponentCompilerMeta } from './ComponentCompilerMeta.stub';
 import { stubComponentCompilerEvent } from './ComponentCompilerEvent.stub';
+import { stubTypesImportData } from './TypesImportData.stub';
 
 describe('generate-event-types', () => {
   describe('generateEventTypes', () => {
@@ -27,34 +28,38 @@ describe('generate-event-types', () => {
     });
 
     it('returns an empty array when no events are provided', () => {
+      const stubImportTypes = stubTypesImportData();
       const componentMeta = stubComponentCompilerMeta();
 
-      expect(generateEventTypes(componentMeta)).toEqual([]);
+      expect(generateEventTypes(componentMeta, stubImportTypes)).toEqual([]);
     });
 
     it('prefixes the event name with "on"', () => {
+      const stubImportTypes = stubTypesImportData();
       const componentMeta = stubComponentCompilerMeta({
         events: [stubComponentCompilerEvent()],
       });
 
-      const actualTypeInfo = generateEventTypes(componentMeta);
+      const actualTypeInfo = generateEventTypes(componentMeta, stubImportTypes);
 
       expect(actualTypeInfo).toHaveLength(1);
       expect(actualTypeInfo[0].name).toBe('onMyEvent');
     });
 
     it('derives a generic CustomEvent from the original type', () => {
+      const stubImportTypes = stubTypesImportData();
       const componentMeta = stubComponentCompilerMeta({
         events: [stubComponentCompilerEvent()],
       });
 
-      const actualTypeInfo = generateEventTypes(componentMeta);
+      const actualTypeInfo = generateEventTypes(componentMeta, stubImportTypes);
 
       expect(actualTypeInfo).toHaveLength(1);
       expect(actualTypeInfo[0].type).toBe('(event: CustomEvent<UserImplementedEventType>) => void');
     });
 
     it('derives CustomEvent type when there is no original typing field', () => {
+      const stubImportTypes = stubTypesImportData();
       const componentEvent = stubComponentCompilerEvent({
         complexType: {
           original: '',
@@ -66,7 +71,7 @@ describe('generate-event-types', () => {
         events: [componentEvent],
       });
 
-      const actualTypeInfo = generateEventTypes(componentMeta);
+      const actualTypeInfo = generateEventTypes(componentMeta, stubImportTypes);
 
       expect(actualTypeInfo).toHaveLength(1);
       expect(actualTypeInfo[0].type).toBe('CustomEvent');
@@ -76,6 +81,7 @@ describe('generate-event-types', () => {
       const componentMeta = stubComponentCompilerMeta({
         events: [stubComponentCompilerEvent()],
       });
+      const stubImportTypes = stubTypesImportData();
 
       const expectedTypeInfo: d.TypeInfo = [
         {
@@ -88,7 +94,7 @@ describe('generate-event-types', () => {
         },
       ];
 
-      const actualTypeInfo = generateEventTypes(componentMeta);
+      const actualTypeInfo = generateEventTypes(componentMeta, stubImportTypes);
 
       expect(actualTypeInfo).toEqual(expectedTypeInfo);
     });
@@ -111,6 +117,7 @@ describe('generate-event-types', () => {
       const componentMeta = stubComponentCompilerMeta({
         events: [componentEvent1, componentEvent2],
       });
+      const stubImportTypes = stubTypesImportData();
 
       const expectedTypeInfo: d.TypeInfo = [
         {
@@ -131,7 +138,7 @@ describe('generate-event-types', () => {
         },
       ];
 
-      const actualTypeInfo = generateEventTypes(componentMeta);
+      const actualTypeInfo = generateEventTypes(componentMeta, stubImportTypes);
 
       expect(actualTypeInfo).toEqual(expectedTypeInfo);
     });

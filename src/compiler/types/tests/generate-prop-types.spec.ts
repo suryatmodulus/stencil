@@ -4,6 +4,7 @@ import * as Util from '../../../utils/util';
 import { stubComponentCompilerMeta } from './ComponentCompilerMeta.stub';
 import { stubComponentCompilerProperty } from './ComponentCompilerProperty.stub';
 import { stubComponentCompilerVirtualProperty } from './ComponentCompilerVirtualProperty.stub';
+import { stubTypesImportData } from './TypesImportData.stub';
 
 describe('generate-prop-types', () => {
   describe('generatePropTypes', () => {
@@ -19,12 +20,14 @@ describe('generate-prop-types', () => {
     });
 
     it('returns an empty array when no props are provided', () => {
+      const stubImportTypes = stubTypesImportData();
       const componentMeta = stubComponentCompilerMeta();
 
-      expect(generatePropTypes(componentMeta)).toEqual([]);
+      expect(generatePropTypes(componentMeta, stubImportTypes)).toEqual([]);
     });
 
     it('returns the correct type information for a single property', () => {
+      const stubImportTypes = stubTypesImportData();
       const componentMeta = stubComponentCompilerMeta({
         properties: [stubComponentCompilerProperty()],
       });
@@ -40,12 +43,13 @@ describe('generate-prop-types', () => {
         },
       ];
 
-      const actualTypeInfo = generatePropTypes(componentMeta);
+      const actualTypeInfo = generatePropTypes(componentMeta, stubImportTypes);
 
       expect(actualTypeInfo).toEqual(expectedTypeInfo);
     });
 
     it('returns the correct type information for a single virtual property', () => {
+      const stubImportTypes = stubTypesImportData();
       const componentMeta = stubComponentCompilerMeta({
         virtualProperties: [stubComponentCompilerVirtualProperty()],
       });
@@ -61,12 +65,13 @@ describe('generate-prop-types', () => {
         },
       ];
 
-      const actualTypeInfo = generatePropTypes(componentMeta);
+      const actualTypeInfo = generatePropTypes(componentMeta, stubImportTypes);
 
       expect(actualTypeInfo).toEqual(expectedTypeInfo);
     });
 
     it('returns the correct type information for concrete and virtual properties', () => {
+      const stubImportTypes = stubTypesImportData();
       const componentMeta = stubComponentCompilerMeta({
         properties: [stubComponentCompilerProperty()],
         virtualProperties: [stubComponentCompilerVirtualProperty()],
@@ -91,7 +96,7 @@ describe('generate-prop-types', () => {
         },
       ];
 
-      const actualTypeInfo = generatePropTypes(componentMeta);
+      const actualTypeInfo = generatePropTypes(componentMeta, stubImportTypes);
 
       expect(actualTypeInfo).toEqual(expectedTypeInfo);
     });

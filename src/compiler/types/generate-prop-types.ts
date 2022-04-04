@@ -1,16 +1,18 @@
 import type * as d from '../../declarations';
 import { getTextDocs } from '@utils';
+import { updateTypeIdentifierNames } from './stencil-types';
 
 /**
  * Generates the individual event types for all @Prop() decorated events in a component
  * @param cmpMeta component runtime metadata for a single component
+ * @param typeImportData locally/imported/globally used type names, which may be used to prevent naming collisions
  * @returns the generated type metadata
  */
-export const generatePropTypes = (cmpMeta: d.ComponentCompilerMeta): d.TypeInfo => {
+export const generatePropTypes = (cmpMeta: d.ComponentCompilerMeta, typeImportData: d.TypesImportData): d.TypeInfo => {
   return [
     ...cmpMeta.properties.map((cmpProp) => ({
       name: cmpProp.name,
-      type: cmpProp.complexType.original,
+      type: getType(cmpProp, cmpMeta, typeImportData),
       optional: cmpProp.optional,
       required: cmpProp.required,
       internal: cmpProp.internal,
@@ -25,4 +27,35 @@ export const generatePropTypes = (cmpMeta: d.ComponentCompilerMeta): d.TypeInfo 
       internal: false,
     })),
   ];
+};
+
+/**
+ * Determine the correct type name for all type(s) used by a class member annotated with `@Prop()`
+ * @param cmpProp the compiler metadata for a single `@Prop()`
+ * @param cmpMeta component runtime metadata for a single component
+ * @param typeImportData locally/imported/globally used type names, which may be used to prevent naming collisions
+ * @returns the type associated with a `@Prop()`
+ */
+function getType(
+  cmpProp: d.ComponentCompilerProperty,
+  cmpMeta: d.ComponentCompilerMeta,
+  typeImportData: d.TypesImportData
+): string {
+  return updateTypeIdentifierNames(
+    cmpProp.complexType.references,
+    cmpMeta,
+    typeImportData,
+    cmpProp.complexType.original,
+    updateTypeName
+  );
+}
+
+/**
+ * Determine whether the string representation of a type should be replaced with an alias
+ * @param currentTypeName the current string representation of a type
+ * @param typeAlias a type member and a potential different name associated with the type member
+ * @returns the updated string representation of a type. If the type is not updated, the original type name is returned
+ */
+const updateTypeName = (currentTypeName: string, typeAlias: d.TypesMemberNameData): string => {
+  return typeAlias.localName === currentTypeName && typeAlias.importName ? typeAlias.importName : currentTypeName;
 };
