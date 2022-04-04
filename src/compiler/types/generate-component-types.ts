@@ -20,7 +20,7 @@ export const generateComponentTypes = (
 
   const propAttributes = generatePropTypes(cmp);
   const methodAttributes = generateMethodTypes(cmp);
-  const eventAttributes = generateEventTypes(cmp.events);
+  const eventAttributes = generateEventTypes(cmp);
 
   const componentAttributes = attributesToMultiLineString(
     [...propAttributes, ...methodAttributes],
