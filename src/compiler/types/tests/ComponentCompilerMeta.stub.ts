@@ -7,7 +7,9 @@ import * as d from '@stencil/core/declarations';
  * defaults provided by this function.
  * @returns the stubbed `ComponentCompilerMeta`
  */
-export const stubComponentCompilerMeta = (overrides: Partial<d.ComponentCompilerMeta> = {}): d.ComponentCompilerMeta => {
+export const stubComponentCompilerMeta = (
+  overrides: Partial<d.ComponentCompilerMeta> = {}
+): d.ComponentCompilerMeta => {
   // TODO(STENCIL-000): Continue to build out default stub, remove the type assertion on `default`
   const defaults: d.ComponentCompilerMeta = {
     events: [],

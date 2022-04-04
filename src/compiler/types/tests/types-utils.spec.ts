@@ -1,5 +1,8 @@
 import * as d from '@stencil/core/declarations';
 import { updateTypeMemberNames } from '../types-utils';
+import { stubComponentCompilerMeta } from './ComponentCompilerMeta.stub';
+import { stubTypesImportData } from './TypesImportData.stub';
+import { stubComponentCompilerTypeReference } from './ComponentCompilerTypeReference.stub';
 
 describe('types-utils', () => {
   describe('updateTypeMemberNames', () => {
@@ -16,42 +19,6 @@ describe('types-utils', () => {
       // dirnameSpy.mockRestore();
       // resolveSpy.mockRestore();
     });
-
-    // TODO(): Build a stub for d.ComponentCompilerMeta, remove the type assertion
-    const stubComponentCompilerMeta = (overrides: Partial<d.ComponentCompilerMeta> = {}): d.ComponentCompilerMeta => {
-      const defaults: d.ComponentCompilerMeta = {
-        events: [],
-        sourceFilePath: '/some/stubbed/path/my-component.tsx',
-      } as d.ComponentCompilerMeta;
-
-      return { ...defaults, ...overrides };
-    };
-
-    // TODO: Separate this out
-    const stubComponentCompilerTypeReference = (
-      overrides: Partial<d.ComponentCompilerTypeReference> = {}
-    ): d.ComponentCompilerTypeReference => {
-      const defaults: d.ComponentCompilerTypeReference = {
-        location: 'global',
-      };
-
-      return { ...defaults, ...overrides };
-    };
-
-    // TODO: Separate this out
-    const stubTypesImportData = (overrides: Partial<d.TypesImportData> = {}): d.TypesImportData => {
-      const defaults: d.TypesImportData = {
-        // TODO: It may make sense for this to return nothing...this'll be highly coupled to tests
-        Something: [
-          {
-            localName: '',
-            importName: '',
-          },
-        ],
-      };
-
-      return { ...defaults, ...overrides };
-    };
 
     it('returns the provided type when no type references exist', () => {
       const expectedTypeName = 'CustomType';
