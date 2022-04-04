@@ -64,7 +64,6 @@ export const generateAppTypes = async (
  * @returns the contents of the `components.d.ts` file
  */
 const generateComponentTypesFile = (config: d.Config, buildCtx: d.BuildCtx, areTypesInternal: boolean): string => {
-  // todo: consider internal types
   let typeImportData: d.TypesImportData = {};
   const c: string[] = [];
   const allTypes = new Map<string, number>();

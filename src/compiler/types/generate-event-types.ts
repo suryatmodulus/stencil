@@ -1,6 +1,6 @@
 import type * as d from '../../declarations';
 import { getTextDocs, toTitleCase } from '@utils';
-import { updateTypeMemberNames } from './types-utils';
+import { updateTypeIdentifierNames } from './stencil-types';
 
 /**
  * Generates type information for a series of events on a component
@@ -42,7 +42,7 @@ const getEventType = (
   if (!cmpEvent.complexType.original) {
     return 'CustomEvent';
   }
-  const theType = updateTypeMemberNames(
+  const theType = updateTypeIdentifierNames(
     cmpEvent.complexType.references,
     cmpMeta,
     typeImportData,

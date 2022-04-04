@@ -1,6 +1,7 @@
 import type * as d from '../../declarations';
 import { getTextDocs } from '@utils';
-import { updateTypeMemberNames } from './types-utils';
+import { updateTypeIdentifierNames } from './stencil-types';
+
 /**
  * Generates type information for a series of props on a component
  * @param cmpMeta component runtime metadata for a single component
@@ -42,7 +43,7 @@ function getType(
   cmpMeta: d.ComponentCompilerMeta,
   typeImportData: d.TypesImportData
 ): string {
-  return updateTypeMemberNames(
+  return updateTypeIdentifierNames(
     cmpProp.complexType.references,
     cmpMeta,
     typeImportData,

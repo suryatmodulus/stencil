@@ -1,10 +1,10 @@
 import * as d from '@stencil/core/declarations';
-import { updateTypeMemberNames } from '../types-utils';
 import { stubComponentCompilerMeta } from './ComponentCompilerMeta.stub';
 import { stubTypesImportData } from './TypesImportData.stub';
 import { stubComponentCompilerTypeReference } from './ComponentCompilerTypeReference.stub';
+import { updateTypeIdentifierNames } from '../stencil-types';
 
-describe('types-utils', () => {
+describe('stencil-types', () => {
   describe('updateTypeMemberNames', () => {
     // let dirnameSpy: jest.SpyInstance<ReturnType<typeof Path.dirname>, Parameters<typeof Path.dirname>>;
     // let resolveSpy: jest.SpyInstance<ReturnType<typeof Path.resolve>, Parameters<typeof Path.resolve>>;
@@ -23,7 +23,7 @@ describe('types-utils', () => {
     it('returns the provided type when no type references exist', () => {
       const expectedTypeName = 'CustomType';
 
-      const actualTypeName = updateTypeMemberNames({}, stubComponentCompilerMeta(), {}, expectedTypeName, () => 'TODO');
+      const actualTypeName = updateTypeIdentifierNames({}, stubComponentCompilerMeta(), {}, expectedTypeName, () => 'TODO');
 
       expect(actualTypeName).toBe(expectedTypeName);
     });
@@ -34,7 +34,7 @@ describe('types-utils', () => {
       };
       const expectedTypeName = 'CustomType';
 
-      const actualTypeName = updateTypeMemberNames(
+      const actualTypeName = updateTypeIdentifierNames(
         typeReferences,
         stubComponentCompilerMeta(),
         {},
@@ -51,7 +51,7 @@ describe('types-utils', () => {
       };
       const expectedTypeName = 'CustomType';
 
-      const actualTypeName = updateTypeMemberNames(
+      const actualTypeName = updateTypeIdentifierNames(
         typeReferences,
         stubComponentCompilerMeta(),
         {},
@@ -81,7 +81,7 @@ describe('types-utils', () => {
         ],
       });
 
-      const actualTypeName = updateTypeMemberNames(
+      const actualTypeName = updateTypeIdentifierNames(
         typeReferences,
         stubComponentCompilerMeta(),
         typeImports,
@@ -112,7 +112,7 @@ describe('types-utils', () => {
         ],
       });
 
-      const actualTypeName = updateTypeMemberNames(
+      const actualTypeName = updateTypeIdentifierNames(
         typeReferences,
         stubComponentCompilerMeta(),
         typeImports,
