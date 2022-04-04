@@ -18,6 +18,7 @@ module.exports = {
     '!<rootDir>/scripts/build/**/*.{js,jsx,ts,tsx}',
     '!<rootDir>/scripts/bundles/helpers/compiler-cjs-intro.js',
     '!<rootDir>/scripts/bundles/helpers/compiler-cjs-outro.js',
+    '!<rootDir>/src/**/*.stub.{ts,tsx}',
     '<rootDir>/src/app-data/**/*.{js,jsx,ts,tsx}',
     '<rootDir>/src/app-globals/**/*.{js,jsx,ts,tsx}',
     '<rootDir>/src/cli/**/*.{js,jsx,ts,tsx}',
@@ -52,6 +53,8 @@ module.exports = {
     '<rootDir>/sys/',
     '<rootDir>/test/',
     '<rootDir>/testing/',
+    '.stub.ts',
+    '.stub.tsx',
   ],
   testRegex: '/(src|scripts)/.*\\.spec\\.(ts|tsx|js)$',
   // TODO(STENCIL-307): Move away from Jasmine runner for internal Stencil tests, which involves re-working environment

@@ -11,7 +11,10 @@ export const stubComponentCompilerMeta = (overrides: Partial<d.ComponentCompiler
   // TODO(STENCIL-000): Continue to build out default stub, remove the type assertion on `default`
   const defaults: d.ComponentCompilerMeta = {
     events: [],
+    methods: [],
+    properties: [],
     sourceFilePath: '/some/stubbed/path/my-component.tsx',
+    virtualProperties: [],
   } as d.ComponentCompilerMeta;
 
   return { ...defaults, ...overrides };
