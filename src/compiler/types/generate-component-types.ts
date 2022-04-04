@@ -10,7 +10,10 @@ import { generatePropTypes } from './generate-prop-types';
  * @param areTypesInternal `true` if types being generated are for a project's internal purposes, `false` otherwise
  * @returns the generated types string alongside additional metadata
  */
-export const generateComponentTypes = (cmp: d.ComponentCompilerMeta, areTypesInternal: boolean): d.TypesModule => {
+export const generateComponentTypes = (
+  cmp: d.ComponentCompilerMeta,
+  areTypesInternal: boolean
+): d.TypesModule => {
   const tagName = cmp.tagName.toLowerCase();
   const tagNameAsPascal = dashToPascalCase(tagName);
   const htmlElementName = `HTML${tagNameAsPascal}Element`;
