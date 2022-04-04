@@ -28,7 +28,7 @@ export const sortImportNames = (a: d.TypesMemberNameData, b: d.TypesMemberNameDa
  * @param updateTypeName
  * @returns
  */
-export const extracted = (
+export const updateTypeMemberNames = (
   typeReferences: d.ComponentCompilerTypeReferences,
   cmpMeta: d.ComponentCompilerMeta,
   typeImportData: d.TypesImportData,

@@ -1,9 +1,8 @@
 import * as d from '@stencil/core/declarations';
-import { extracted } from '../types-utils';
+import { updateTypeMemberNames } from '../types-utils';
 
 describe('types-utils', () => {
-  // TODO(NOW): fix the name if we keep this
-  describe('extracted', () => {
+  describe('updateTypeMemberNames', () => {
     // let dirnameSpy: jest.SpyInstance<ReturnType<typeof Path.dirname>, Parameters<typeof Path.dirname>>;
     // let resolveSpy: jest.SpyInstance<ReturnType<typeof Path.resolve>, Parameters<typeof Path.resolve>>;
 
@@ -57,7 +56,7 @@ describe('types-utils', () => {
     it('returns the provided type when no type references exist', () => {
       const expectedTypeName = 'CustomType';
 
-      const actualTypeName = extracted({}, stubComponentCompilerMeta(), {}, expectedTypeName, () => 'TODO');
+      const actualTypeName = updateTypeMemberNames({}, stubComponentCompilerMeta(), {}, expectedTypeName, () => 'TODO');
 
       expect(actualTypeName).toBe(expectedTypeName);
     });
@@ -68,7 +67,13 @@ describe('types-utils', () => {
       };
       const expectedTypeName = 'CustomType';
 
-      const actualTypeName = extracted(typeReferences, stubComponentCompilerMeta(), {}, expectedTypeName, () => 'TODO');
+      const actualTypeName = updateTypeMemberNames(
+        typeReferences,
+        stubComponentCompilerMeta(),
+        {},
+        expectedTypeName,
+        () => 'TODO'
+      );
 
       expect(actualTypeName).toBe(expectedTypeName);
     });
@@ -79,7 +84,13 @@ describe('types-utils', () => {
       };
       const expectedTypeName = 'CustomType';
 
-      const actualTypeName = extracted(typeReferences, stubComponentCompilerMeta(), {}, expectedTypeName, () => 'TODO');
+      const actualTypeName = updateTypeMemberNames(
+        typeReferences,
+        stubComponentCompilerMeta(),
+        {},
+        expectedTypeName,
+        () => 'TODO'
+      );
 
       expect(actualTypeName).toBe(expectedTypeName);
     });
@@ -103,7 +114,7 @@ describe('types-utils', () => {
         ],
       });
 
-      const actualTypeName = extracted(
+      const actualTypeName = updateTypeMemberNames(
         typeReferences,
         stubComponentCompilerMeta(),
         typeImports,
@@ -134,7 +145,7 @@ describe('types-utils', () => {
         ],
       });
 
-      const actualTypeName = extracted(
+      const actualTypeName = updateTypeMemberNames(
         typeReferences,
         stubComponentCompilerMeta(),
         typeImports,

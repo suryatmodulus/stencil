@@ -1,6 +1,6 @@
 import type * as d from '../../declarations';
 import { getTextDocs } from '@utils';
-import { extracted } from './types-utils';
+import { updateTypeMemberNames } from './types-utils';
 /**
  * Generates type information for a series of props on a component
  * @param cmpMeta component runtime metadata for a single component
@@ -42,7 +42,7 @@ function getType(
   cmpMeta: d.ComponentCompilerMeta,
   typeImportData: d.TypesImportData
 ): string {
-  return extracted(
+  return updateTypeMemberNames(
     cmpProp.complexType.references,
     cmpMeta,
     typeImportData,
