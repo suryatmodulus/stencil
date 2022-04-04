@@ -30,13 +30,11 @@ export const updateStencilTypesImports = (typesDir: string, dtsFilePath: string,
   return dtsContent;
 };
 
-
 /**
  *
  * @param typeReferences
  * @param cmpMeta component runtime metadata for a single component
- * @param typeImportData import data for TypeScript types, which may be used to override existing type metadata to avoid
- * naming collisions
+ * @param typeImportData locally/imported/globally used type names, which may be used to prevent naming collisions
  * @param initialType
  * @param updateTypeName
  * @returns
@@ -73,7 +71,6 @@ export const updateTypeIdentifierNames = (
   }
   return theType;
 };
-
 
 /**
  * Writes Stencil core typings file to disk for a dist-* output target

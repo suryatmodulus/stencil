@@ -73,8 +73,8 @@ const generateComponentTypesFile = (config: d.Config, buildCtx: d.BuildCtx, areT
     /**
      * Generate a key-value store that uses the path to the file where an import is defined as the key, and an object
      * containing the import's original name and any 'new' name we give it to avoid collisions. We're generating this
-     * data structure for each Stencil component in series, therefore the memory footprint of this entity will grow as
-     * more components are processed.
+     * data structure for each Stencil component in series, therefore the memory footprint of this entity will likely
+     * grow as more components (with additional types) are processed.
      */
     typeImportData = updateReferenceTypeImports(typeImportData, allTypes, cmp, cmp.sourceFilePath);
     return generateComponentTypes(cmp, typeImportData, areTypesInternal);

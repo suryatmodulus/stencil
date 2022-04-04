@@ -29,7 +29,7 @@ export const updateReferenceTypeImports = (
 
 /**
  * Describes a function that updates type import references for a file
- * @param typeImportData
+ * @param typeImportData locally/imported/globally used type names, which may be used to prevent naming collisions
  * @param typesReferences
  * @returns
  */

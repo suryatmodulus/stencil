@@ -4,9 +4,8 @@ import { updateTypeIdentifierNames } from './stencil-types';
 
 /**
  * Generates type information for a series of methods on a component
- * @param cmpMeta TODO
- * @param typeImportData import data for TypeScript types, which may be used to override existing type metadata to avoid
- * naming collisions
+ * @param cmpMeta component runtime metadata for a single component
+ * @param typeImportData locally/imported/globally used type names, which may be used to prevent naming collisions
  * @returns the generated type metadata
  */
 export const generateMethodTypes = (
@@ -29,8 +28,7 @@ export const generateMethodTypes = (
  * Determine the correct type name for all type(s) used by a class member annotated with `@Method()`
  * @param cmpMethod the compiler metadata for a single `@Method()`
  * @param cmpMeta component runtime metadata for a single component
- * @param typeImportData import data for TypeScript types, which may be used to override existing type metadata to avoid
- * naming collisions
+ * @param typeImportData locally/imported/globally used type names, which may be used to prevent naming collisions
  * @returns the type associated with a `@Method()`
  */
 function getType(

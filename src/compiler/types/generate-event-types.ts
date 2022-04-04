@@ -5,8 +5,7 @@ import { updateTypeIdentifierNames } from './stencil-types';
 /**
  * Generates type information for a series of events on a component
  * @param cmpMeta component runtime metadata for a single component
- * @param typeImportData import data for TypeScript types, which may be used to override existing type metadata to avoid
- * naming collisions
+ * @param typeImportData locally/imported/globally used type names, which may be used to prevent naming collisions
  * @returns the generated type metadata
  */
 export const generateEventTypes = (cmpMeta: d.ComponentCompilerMeta, typeImportData: d.TypesImportData): d.TypeInfo => {
@@ -30,8 +29,7 @@ export const generateEventTypes = (cmpMeta: d.ComponentCompilerMeta, typeImportD
  * Determine the correct type name for all type(s) used by a class member annotated with `@Event()`
  * @param cmpEvent the compiler metadata for a single `@Event()`
  * @param cmpMeta component runtime metadata for a single component
- * @param typeImportData import data for TypeScript types, which may be used to override existing type metadata to avoid
- * naming collisions
+ * @param typeImportData locally/imported/globally used type names, which may be used to prevent naming collisions
  * @returns the type associated with a `@Event()`
  */
 const getEventType = (

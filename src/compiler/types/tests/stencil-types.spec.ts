@@ -23,7 +23,13 @@ describe('stencil-types', () => {
     it('returns the provided type when no type references exist', () => {
       const expectedTypeName = 'CustomType';
 
-      const actualTypeName = updateTypeIdentifierNames({}, stubComponentCompilerMeta(), {}, expectedTypeName, () => 'TODO');
+      const actualTypeName = updateTypeIdentifierNames(
+        {},
+        stubComponentCompilerMeta(),
+        {},
+        expectedTypeName,
+        () => 'TODO'
+      );
 
       expect(actualTypeName).toBe(expectedTypeName);
     });
