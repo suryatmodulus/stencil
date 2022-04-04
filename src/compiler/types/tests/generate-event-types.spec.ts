@@ -2,6 +2,9 @@ import type * as d from '../../../declarations';
 import { generateEventTypes } from '../generate-event-types';
 import * as UtilHelpers from '../../../utils/helpers';
 import * as Util from '../../../utils/util';
+import { stubComponentCompilerMeta } from './ComponentCompilerMeta.stub';
+import { stubComponentCompilerEvent } from './ComponentCompilerEvent.stub';
+import { stubTypesImportData } from './TypesImportData.stub';
 
 describe('generate-event-types', () => {
   describe('generateEventTypes', () => {
@@ -23,65 +26,6 @@ describe('generate-event-types', () => {
       getTextDocsSpy.mockRestore();
       toTitleCaseSpy.mockRestore();
     });
-
-    // TODO(): Build a stub for d.ComponentCompilerMeta, remove the type assertion
-    const stubComponentCompilerMeta = (overrides: Partial<d.ComponentCompilerMeta> = {}): d.ComponentCompilerMeta => {
-      const defaults: d.ComponentCompilerMeta = {
-        events: [],
-        sourceFilePath: '/some/stubbed/path/my-component.tsx',
-      } as d.ComponentCompilerMeta;
-
-      return { ...defaults, ...overrides };
-    };
-
-    // TODO: Separate this out
-    /**
-     * Generates a stub {@link ComponentCompilerEvent}. This function uses sensible defaults for the initial stub.
-     * However, any field in the object may be overridden via the `overrides` field.
-     * @param overrides a partial implementation of `ComponentCompilerEvent`. Any provided fields will override the
-     * defaults provided by this function.
-     * @returns the stubbed `ComponentCompilerEvent`
-     */
-    const stubComponentCompilerEvent = (
-      overrides: Partial<d.ComponentCompilerEvent> = {}
-    ): d.ComponentCompilerEvent => {
-      const defaults: d.ComponentCompilerEvent = {
-        bubbles: true,
-        cancelable: true,
-        composed: true,
-        internal: false,
-        name: 'myEvent',
-        method: 'myEvent',
-        complexType: {
-          original: 'UserImplementedEventType',
-          resolved: '"foo" | "bar"',
-          references: {
-            UserImplementedEventType: {
-              location: 'import',
-              path: './resources',
-            },
-          },
-        },
-        docs: undefined,
-      };
-
-      return { ...defaults, ...overrides };
-    };
-
-    // TODO: Separate this out
-    const stubTypesImportData = (overrides: Partial<d.TypesImportData> = {}): d.TypesImportData => {
-      const defaults: d.TypesImportData = {
-        // TODO: It may make sense for this to return nothing...this'll be highly coupled to tests
-        Something: [
-          {
-            localName: '',
-            importName: '',
-          },
-        ],
-      };
-
-      return { ...defaults, ...overrides };
-    };
 
     it('returns an empty array when no events are provided', () => {
       const stubImportTypes = stubTypesImportData();
