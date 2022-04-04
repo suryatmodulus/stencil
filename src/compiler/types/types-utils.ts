@@ -1,4 +1,5 @@
 import type * as d from '../../declarations';
+import { dirname, resolve } from 'path';
 
 export const COMPONENTS_DTS_HEADER = `/* eslint-disable */
 /* tslint:disable */
@@ -15,4 +16,47 @@ export const sortImportNames = (a: d.TypesMemberNameData, b: d.TypesMemberNameDa
   if (a.localName < b.localName) return -1;
   if (a.localName > b.localName) return 1;
   return 0;
+};
+
+/**
+ *
+ * @param typeReferences
+ * @param cmpMeta component runtime metadata for a single component
+ * @param typeImportData import data for TypeScript types, which may be used to override existing type metadata to avoid
+ * naming collisions
+ * @param initialType
+ * @param updateTypeName
+ * @returns
+ */
+export const extracted = (
+  typeReferences: d.ComponentCompilerTypeReferences,
+  cmpMeta: d.ComponentCompilerMeta,
+  typeImportData: d.TypesImportData,
+  initialType: string,
+  updateTypeName: (currentTypeName: string, typeAlias: d.TypesMemberNameData) => string
+): string => {
+  let theType = initialType;
+
+  // TODO
+  // if (!typeReferences.hasOwnProperty(theType)) {
+  //   return theType;
+  // }
+
+  // iterate over each of the type references, as there may be >1 reference to rewrite (e.g. `@Prop() foo: Bar & Baz`)
+  for (let typeName of Object.keys(typeReferences)) {
+    // TODO: Move this out if we keep it
+    let importResolvedFile = typeReferences[typeName].path;
+    if (importResolvedFile && importResolvedFile.startsWith('.')) {
+      importResolvedFile = resolve(dirname(cmpMeta.sourceFilePath), importResolvedFile);
+    }
+
+    if (!typeImportData.hasOwnProperty(importResolvedFile)) {
+      continue;
+    }
+
+    for (let typesImportDatumElement of typeImportData[importResolvedFile]) {
+      theType = updateTypeName(theType, typesImportDatumElement);
+    }
+  }
+  return theType;
 };
