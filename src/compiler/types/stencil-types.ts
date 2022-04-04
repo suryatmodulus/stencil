@@ -1,5 +1,5 @@
 import type * as d from '../../declarations';
-import { dirname, join, relative } from 'path';
+import { dirname, join, relative, resolve } from 'path';
 import { isOutputTargetDistTypes } from '../output-targets/output-utils';
 import { normalizePath } from '@utils';
 
@@ -28,6 +28,74 @@ export const updateStencilTypesImports = (typesDir: string, dtsFilePath: string,
     dtsContent = dtsContent.replace(/(from\s*(:?'|"))@stencil\/core('|")/g, `$1${coreDtsPath}$2`);
   }
   return dtsContent;
+};
+
+// TODO(NOW): This must be broken for small prop names
+// TODO(STENCIL-000): Remove this once we have a better way to inspect parameters on a method
+/**
+ * Determine whether the string representation of a type should be replaced with an alias for a `@Method()`
+ * @param currentTypeName the current string representation of a type
+ * @param typeAlias a type member and a potential different name associated with the type member
+ * @returns the updated string representation of a type. If the type is not updated, the original type name is returned
+ */
+const updateTypeNameForMethod = (currentTypeName: string, typeAlias: d.TypesMemberNameData): string => {
+  return currentTypeName.replace(new RegExp(typeAlias.localName, 'g'), typeAlias.importName);
+};
+
+// TODO(STENCIL-000): Inline this function once `updateTypeNameForMethod` is no longer needed
+/**
+ * Determine whether the string representation of a type should be replaced with an alias
+ * @param currentTypeName the current string representation of a type
+ * @param typeAlias a type member and a potential different name associated with the type member
+ * @returns the updated string representation of a type. If the type is not updated, the original type name is returned
+ */
+const updateTypeNameForPropAndEvent = (currentTypeName: string, typeAlias: d.TypesMemberNameData): string => {
+  return typeAlias.localName === currentTypeName && typeAlias.importName ? typeAlias.importName : currentTypeName;
+};
+
+// TODO(STENCIL-000): Remove `isMethod` parameter
+/**
+ * Utility for ensuring that naming collisions do not appear in type declaration files for a component's props, events,
+ * and methods
+ * @param typeReferences all type names
+ * @param typeImportData locally/imported/globally used type names, which may be used to prevent naming collisions
+ * @param sourceFilePath
+ * @param initialType
+ * @param isMethod
+ * @returns
+ */
+export const updateTypeIdentifierNames = (
+  typeReferences: d.ComponentCompilerTypeReferences,
+  typeImportData: d.TypesImportData,
+  sourceFilePath: string,
+  initialType: string,
+  isMethod: boolean = false
+): string => {
+  const updateTypeName = isMethod ? updateTypeNameForMethod : updateTypeNameForPropAndEvent;
+  let theType = initialType;
+
+  // TODO
+  // if (!typeReferences.hasOwnProperty(theType)) {
+  //   return theType;
+  // }
+
+  // iterate over each of the type references, as there may be >1 reference to rewrite (e.g. `@Prop() foo: Bar & Baz`)
+  for (let typeName of Object.keys(typeReferences)) {
+    // TODO: Move this out if we keep it
+    let importResolvedFile = typeReferences[typeName].path;
+    if (importResolvedFile && importResolvedFile.startsWith('.')) {
+      importResolvedFile = resolve(dirname(sourceFilePath), importResolvedFile);
+    }
+
+    if (!typeImportData.hasOwnProperty(importResolvedFile)) {
+      continue;
+    }
+
+    for (let typesImportDatumElement of typeImportData[importResolvedFile]) {
+      theType = updateTypeName(theType, typesImportDatumElement);
+    }
+  }
+  return theType;
 };
 
 /**
