@@ -3,7 +3,7 @@ import { getTextDocs, toTitleCase } from '@utils';
 import { updateTypeIdentifierNames } from './stencil-types';
 
 /**
- * Generates type information for a series of events on a component
+ * Generates the individual event types for all @Event() decorated events in a component
  * @param cmpMeta component runtime metadata for a single component
  * @param typeImportData locally/imported/globally used type names, which may be used to prevent naming collisions
  * @returns the generated type metadata
