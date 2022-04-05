@@ -28,10 +28,9 @@ describe('stencil-types', () => {
 
       const actualTypeName = updateTypeIdentifierNames(
         {},
-        stubComponentCompilerMeta(),
         {},
+        stubComponentCompilerMeta().sourceFilePath,
         expectedTypeName,
-        () => 'SomeTypeThatIsNotCustomType'
       );
 
       expect(actualTypeName).toBe(expectedTypeName);
@@ -45,10 +44,9 @@ describe('stencil-types', () => {
 
       const actualTypeName = updateTypeIdentifierNames(
         typeReferences,
-        stubComponentCompilerMeta(),
         {},
+        stubComponentCompilerMeta().sourceFilePath,
         expectedTypeName,
-        () => 'SomeTypeThatIsNotCustomType'
       );
 
       expect(actualTypeName).toBe(expectedTypeName);
@@ -62,10 +60,9 @@ describe('stencil-types', () => {
 
       const actualTypeName = updateTypeIdentifierNames(
         typeReferences,
-        stubComponentCompilerMeta(),
         {},
+        stubComponentCompilerMeta().sourceFilePath,
         expectedTypeName,
-        () => 'SomeTypeThatIsNotCustomType'
       );
 
       expect(actualTypeName).toBe(expectedTypeName);
@@ -90,10 +87,9 @@ describe('stencil-types', () => {
 
       const actualTypeName = updateTypeIdentifierNames(
         typeReferences,
-        stubComponentCompilerMeta(),
         typeImports,
+        stubComponentCompilerMeta().sourceFilePath,
         initialType,
-        () => expectedType
       );
 
       expect(actualTypeName).toBe(expectedType);
@@ -118,10 +114,9 @@ describe('stencil-types', () => {
 
       const actualTypeName = updateTypeIdentifierNames(
         typeReferences,
-        stubComponentCompilerMeta(),
         typeImports,
+        stubComponentCompilerMeta().sourceFilePath,
         initialType,
-        () => expectedType
       );
 
       expect(actualTypeName).toBe(expectedType);
@@ -146,10 +141,9 @@ describe('stencil-types', () => {
 
       const actualTypeName = updateTypeIdentifierNames(
         typeReferences,
-        stubComponentCompilerMeta(),
         typeImports,
+        stubComponentCompilerMeta().sourceFilePath,
         initialType,
-        () => expectedType
       );
 
       expect(actualTypeName).toBe(expectedType);
@@ -177,10 +171,9 @@ describe('stencil-types', () => {
 
       const actualTypeName = updateTypeIdentifierNames(
         typeReferences,
-        stubComponentCompilerMeta(),
         typeImports,
+        stubComponentCompilerMeta().sourceFilePath,
         initialType,
-        () => expectedType
       );
 
       expect(actualTypeName).toBe(expectedType);

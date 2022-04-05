@@ -53,15 +53,30 @@ const updateTypeNameForPropAndEvent = (currentTypeName: string, typeAlias: d.Typ
   return typeAlias.localName === currentTypeName && typeAlias.importName ? typeAlias.importName : currentTypeName;
 };
 
+/**
+ *
+ * @param typeReference
+ * @param sourceFilePath
+ * @returns
+ */
+const getTypeImportPath = (typeReference: d.ComponentCompilerTypeReference, sourceFilePath: string): string => {
+  let importResolvedFile = typeReference.path;
+  if (importResolvedFile && importResolvedFile.startsWith('.')) {
+    importResolvedFile = resolve(dirname(sourceFilePath), importResolvedFile);
+  }
+  return importResolvedFile;
+};
+
 // TODO(STENCIL-000): Remove `isMethod` parameter
 /**
  * Utility for ensuring that naming collisions do not appear in type declaration files for a component's props, events,
  * and methods
- * @param typeReferences all type names
+ * @param typeReferences all type names used by a component class member
  * @param typeImportData locally/imported/globally used type names, which may be used to prevent naming collisions
- * @param sourceFilePath
- * @param initialType
- * @param isMethod
+ * @param sourceFilePath the path to the source file of a component using the type being inspected
+ * @param initialType the name of the type that may be updated
+ * @param isMethod if `true`, a `@Method` class member's type(s) are being updated. if `false`, a `@Prop` or `@Event`
+ * class member is being updated
  * @returns
  */
 export const updateTypeIdentifierNames = (
@@ -74,18 +89,13 @@ export const updateTypeIdentifierNames = (
   const updateTypeName = isMethod ? updateTypeNameForMethod : updateTypeNameForPropAndEvent;
   let theType = initialType;
 
-  // TODO
-  // if (!typeReferences.hasOwnProperty(theType)) {
-  //   return theType;
-  // }
+  if (!typeReferences.hasOwnProperty(theType)) {
+    return theType;
+  }
 
   // iterate over each of the type references, as there may be >1 reference to rewrite (e.g. `@Prop() foo: Bar & Baz`)
-  for (let typeName of Object.keys(typeReferences)) {
-    // TODO: Move this out if we keep it
-    let importResolvedFile = typeReferences[typeName].path;
-    if (importResolvedFile && importResolvedFile.startsWith('.')) {
-      importResolvedFile = resolve(dirname(sourceFilePath), importResolvedFile);
-    }
+  for (let typeReference of Object.values(typeReferences)) {
+    let importResolvedFile = getTypeImportPath(typeReference, sourceFilePath);
 
     if (!typeImportData.hasOwnProperty(importResolvedFile)) {
       continue;
