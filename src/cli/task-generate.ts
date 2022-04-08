@@ -4,8 +4,8 @@ import { IS_NODE_ENV } from '../compiler/sys/environment';
 import { validateComponentTag } from '@utils';
 
 /**
- * A little interface to wrap up the info we
- * need to pass around for generating and writing boilerplate.
+ * A little interface to wrap up the info we need to pass around for generating
+ * and writing boilerplate.
  */
 interface BoilerplateFile {
   extension: GeneratableExtension;
@@ -13,7 +13,13 @@ interface BoilerplateFile {
 }
 
 /**
- * Task to generate component boilerplate.
+ * Task to generate component boilerplate and write it to disk. This task can
+ * cause the program to exit with an error under various circumstances, such as
+ * being called in an inappropriate place, being asked to overwrite files that
+ * already exist, etc.
+ *
+ * @param coreCompiler the CoreCompiler
+ * @param config       the config!
  */
 export const taskGenerate = async (coreCompiler: CoreCompiler, config: Config) => {
   if (!IS_NODE_ENV) {
@@ -63,8 +69,8 @@ export const taskGenerate = async (coreCompiler: CoreCompiler, config: Config) =
   checkForOverwrite(filesToGenerate, config);
 
   const writtenFiles = await Promise.all(
-    filesToGenerate.map(({ path, extension }) =>
-      getBoilerplateAndWriteFile(config, path, componentName, extension, extensionsToGenerate.includes('css'))
+    filesToGenerate.map((file) =>
+      getBoilerplateAndWriteFile(config, file, componentName, extensionsToGenerate.includes('css'))
     )
   ).catch((error) => config.logger.error(error));
 
@@ -120,21 +126,19 @@ const getFilepathForFile = (
  * Get the boilerplate for a file and write it to disk
  *
  * @param config        the current config, needed for file operations
- * @param outFile       the path for the file we want to write
+ * @param file          the file we want to write
  * @param componentName the component name (user-supplied)
- * @param extension     the extension we're concerned about right now
  * @param withCss       are we generating CSS?
  */
 const getBoilerplateAndWriteFile = async (
   config: Config,
-  outFile: string,
+  file: BoilerplateFile,
   componentName: string,
-  extension: GeneratableExtension,
   withCss: boolean
-) => {
-  const boilerplate = getBoilerplateByExtension(componentName, extension, withCss);
-  await config.sys.writeFile(outFile, boilerplate);
-  return outFile;
+): Promise<string> => {
+  const boilerplate = getBoilerplateByExtension(componentName, file.extension, withCss);
+  await config.sys.writeFile(file.path, boilerplate);
+  return file.path
 };
 
 /**
