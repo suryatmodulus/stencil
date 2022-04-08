@@ -138,7 +138,7 @@ const getBoilerplateAndWriteFile = async (
 ): Promise<string> => {
   const boilerplate = getBoilerplateByExtension(componentName, file.extension, withCss);
   await config.sys.writeFile(file.path, boilerplate);
-  return file.path
+  return file.path;
 };
 
 /**
