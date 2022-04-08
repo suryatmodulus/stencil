@@ -4,15 +4,6 @@ import { IS_NODE_ENV } from '../compiler/sys/environment';
 import { validateComponentTag } from '@utils';
 
 /**
- * A little interface to wrap up the info we need to pass around for generating
- * and writing boilerplate.
- */
-interface BoilerplateFile {
-  extension: GeneratableExtension;
-  path: string;
-}
-
-/**
  * Task to generate component boilerplate and write it to disk. This task can
  * cause the program to exit with an error under various circumstances, such as
  * being called in an inappropriate place, being asked to overwrite files that
@@ -21,7 +12,7 @@ interface BoilerplateFile {
  * @param coreCompiler the CoreCompiler
  * @param config       the config!
  */
-export const taskGenerate = async (coreCompiler: CoreCompiler, config: Config) => {
+export const taskGenerate = async (coreCompiler: CoreCompiler, config: Config): Promise<void> => {
   if (!IS_NODE_ENV) {
     config.logger.error(`"generate" command is currently only implemented for a NodeJS environment`);
     return config.sys.exit(1);
@@ -153,7 +144,7 @@ const getBoilerplateAndWriteFile = async (
  * @param files  the files we want to check
  * @param config the Config object, used here to get access to `sys.readFile`
  */
-const checkForOverwrite = async (files: BoilerplateFile[], config: Config) => {
+const checkForOverwrite = async (files: BoilerplateFile[], config: Config): Promise<void> => {
   let alreadyPresent: string[] = [];
 
   await Promise.all(
@@ -177,14 +168,14 @@ const checkForOverwrite = async (files: BoilerplateFile[], config: Config) => {
  *
  * @param extension the extension!
  */
-const isTest = (extension: GeneratableExtension) => {
+const isTest = (extension: GeneratableExtension): boolean => {
   return extension === 'e2e.ts' || extension === 'spec.tsx';
 };
 
 /**
  * Get the boilerplate for a file by its extension.
  */
-const getBoilerplateByExtension = (tagName: string, extension: GeneratableExtension, withCss: boolean) => {
+const getBoilerplateByExtension = (tagName: string, extension: GeneratableExtension, withCss: boolean): string => {
   switch (extension) {
     case 'tsx':
       return getComponentBoilerplate(tagName, withCss);
@@ -206,7 +197,7 @@ const getBoilerplateByExtension = (tagName: string, extension: GeneratableExtens
 /**
  * Get the boilerplate for a component.
  */
-const getComponentBoilerplate = (tagName: string, hasStyle: boolean) => {
+const getComponentBoilerplate = (tagName: string, hasStyle: boolean): string => {
   const decorator = [`{`];
   decorator.push(`  tag: '${tagName}',`);
   if (hasStyle) {
@@ -235,7 +226,7 @@ export class ${toPascalCase(tagName)} {
 /**
  * Get the boilerplate for style.
  */
-const getStyleUrlBoilerplate = () =>
+const getStyleUrlBoilerplate = (): string =>
   `:host {
   display: block;
 }
@@ -244,7 +235,7 @@ const getStyleUrlBoilerplate = () =>
 /**
  * Get the boilerplate for a spec test.
  */
-const getSpecTestBoilerplate = (tagName: string) =>
+const getSpecTestBoilerplate = (tagName: string): string =>
   `import { newSpecPage } from '@stencil/core/testing';
 import { ${toPascalCase(tagName)} } from '../${tagName}';
 
@@ -268,7 +259,7 @@ describe('${tagName}', () => {
 /**
  * Get the boilerplate for an E2E test.
  */
-const getE2eTestBoilerplate = (name: string) =>
+const getE2eTestBoilerplate = (name: string): string =>
   `import { newE2EPage } from '@stencil/core/testing';
 
 describe('${name}', () => {
@@ -285,10 +276,19 @@ describe('${name}', () => {
 /**
  * Convert a dash case string to pascal case.
  */
-const toPascalCase = (str: string) =>
+const toPascalCase = (str: string): string =>
   str.split('-').reduce((res, part) => res + part[0].toUpperCase() + part.slice(1), '');
 
 /**
  * Extensions available to generate.
  */
 type GeneratableExtension = 'tsx' | 'css' | 'spec.tsx' | 'e2e.ts';
+
+/**
+ * A little interface to wrap up the info we need to pass around for generating
+ * and writing boilerplate.
+ */
+interface BoilerplateFile {
+  extension: GeneratableExtension;
+  path: string;
+}
